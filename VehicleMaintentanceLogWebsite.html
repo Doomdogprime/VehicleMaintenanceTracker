@@ -24,7 +24,11 @@
 
             function HomePage()
             {
-                const [itemsArray, setItemsArray] = React.useState(['screw', 'cork', 'cog']);
+                //const [itemsArray, setItemsArray] = React.useState([]);
+                const [highPri, setHighPri] = React.useState([]);
+                const [medPri, setMedPri] = React.useState([]);
+                const [lowPri, setLowPri] = React.useState([]);
+                
                 const [value, setValue] = React.useState("test");
                 const [likes, setLikes] = React.useState(0);
                 
@@ -35,28 +39,66 @@
                 const [issue, setIssue] = React.useState('');
                 const [severity, setSeverity] = React.useState('');
                 
-                function handleClick()
+                {/*function handleClick()
                 {
                     setLikes(likes + 1);
-                }
+                }*/}
                 
-                function handleSubmit(event)
+                {/*function handleSubmit(event)
                 {
+                    //only needed to keep the page from refreshing with empty values
                     event.preventDefault();
                     
                     setValue(`${year} ${make} ${model} ${issue}`);
-                }
+                }*/}
                 
-                function handleLogItem()
+                {/*function handleLogItem()
                 {
                     setItemsArray(// Replace the state
                       [ // with a new array
                         ...itemsArray, // that contains all the old items
-                        { id: key++, name: year } // and one new item at the end
-                          //^^^^^name has not been set to ANYTHING yet
+                        { 
+                            id: key++,
+                            name: `${year} ${make} ${model} ${issue}` } //append one new item
+                            //^^^^^this essentially makes the object
+                            //that's in the array.
+                            //id and name are datafields, not defined
+                            //anywhere else.
                       ]
                     );
-                }
+                }*/}
+                
+                
+                //need to set item as issue
+                //and priority from the radio buttons
+                //use sort item as the function for onClick
+                const sortItem = (priority, item) => {
+
+                    switch(priority)
+                    {
+                        case 1: //when priority = 1
+                            setHighPri([...highPri,
+                                        {id: key++,
+                                        name: item}
+                                       ]);
+                            break;
+                        case 2:
+                            setMedPri([...medPri,
+                                       {id: key++,
+                                        name: item}
+                                       ]);
+                            break;
+                        case 3:
+                            setLowPri([...lowPri,
+                                       {id: key++,
+                                        name: item}
+                                       ]);
+                            break;
+                        default:
+                            break;
+                    }
+                };
+                
                 
                 return (
                 <div>
@@ -101,7 +143,7 @@
                         <input 
                             type="radio"
                             name="urgency"
-                            value="high"
+                            value="1"
                             onChange={(e) => setSeverity(e.target.value)}
                             >
                         </input> High
@@ -109,14 +151,14 @@
                         <input
                             type="radio"
                             name="urgency"
-                            value="medium"
+                            value="2"
                             onChange={(e) => setSeverity(e.target.value)}
                             >
                         </input> Medium
                         <input
                             type="radio"
                             name="urgency"
-                            value="low"
+                            value="3"
                             onChange={(e) => setSeverity(e.target.value)}
                             >
                         </input> Low
@@ -124,23 +166,30 @@
                     
                     </form>
                     
-                        {/*I broke this right hereVVVVVVV*/}
-                    <button onClick={handleLogItem}>Submit {likes}</button>
+                    
+                    <button onClick={() => sortItem(severity,issue)}>Submit {likes}</button>
+                    
+                    <h3>High Priority</h3>
                     <ul>
-                        {/*maybe put on change here?*/}
-                        {itemsArray.map((nameOfItem) => (
-                    <li key={nameOfItem}>{nameOfItem}</li>))}
-                        {/*need a way to call the mapping in this
-                           spot when the button is clicked.
-                           I can put the mapping in a function, and put
-                           the function here, but it will do it
-                           upon loading (haven't tried tho)
-                           
-                           might try changing the array's contents
-                           on button click*/}
+                        {/*maps out items in the array */}
+                        {highPri.map((highPri) => (
+                    <li key={highPri.id}>{highPri.name}</li>))}
+                    </ul>
+                        
+                    <h3>Medium Priority</h3>
+                    <ul> 
+                        {medPri.map((medPri) => (
+                        <li key={medPri.id}>{medPri.name}</li>))}
                     </ul>
                     
-                    <button onClick={handleClick}>log: {value} {severity}</button>
+                    <h3>Low Priority</h3>
+                    <ul>
+                        {lowPri.map((lowPri) => (
+                        <li key={lowPri.id}>{lowPri.name}</li>))}
+                    </ul>
+                    
+                    
+                    <button >log: {value} {severity}</button>
                 </div>
                 );
             }
